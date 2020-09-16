@@ -1,0 +1,39 @@
+language: generic
+sudo: reqired
+
+services:
+    - docker
+
+before_install:
+    - docker build -t vdrozdovskyi/react-test -f ./clent/Dockerfile.dev ./client
+
+script:
+    - docker run -e CI=true vdrozdovskyi/react-test npm run test -- --coverage
+
+after_success:
+    - docker build -t vdrozdovskyi/multi-client ./client
+    - docker build -t vdrozdovskyi/multi-nginx ./nginx 
+    - docker build -t vdrozdovskyi/multi-server ./server
+    - docker build -t vdrozdovskyi/multi-worker ./worker 
+    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+    - docker push vdrozdovskyi/multi-client
+    - docker push vdrozdovskyi/multi-nginx 
+    - docker push vdrozdovskyi/multi-server
+    - docker push vdrozdovskyi/multi-worker
+
+
+    # Login docker
+
+
+
+# deploy:
+#     provider: elasticbeanstalk
+#     region: "us-east-2"
+#     app: "docker"
+#     env: "Docker-env"
+#     bucket_name: "elasticbeanstalk-us-east-2-926417195330"
+#     bucket_path: "docker"
+#     on:
+#         branch: master
+#     access_key_id: $AWS_ACCESS_KEY
+#     secret_acces_key: $AWS_SECRET_KEY
