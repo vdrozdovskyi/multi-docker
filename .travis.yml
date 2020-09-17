@@ -1,5 +1,6 @@
-language: generic
 sudo: reqired
+
+language: generic
 
 services:
     - docker
@@ -26,7 +27,7 @@ after_success:
     - docker push vdrozdovskyi/multi-worker
 
 deploy:
-    # edge: true
+    edge: true
     provider: elasticbeanstalk
     region: "us-east-2"
     app: "multi-docker"
