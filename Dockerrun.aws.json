@@ -12,7 +12,7 @@
             "name": "server",
             "image": "vdrozdovskyi/multi-server",
             "hostname": "api",
-            "essential": false,
+            "esorysential": false,
             "memory": 128
         },
         {
@@ -34,7 +34,7 @@
                     "containerPort": 80
                 }
             ],
-            "links": ["client", "server"]                
+            "links": ["client", "server"]
         }
     ]
 }
