@@ -15,25 +15,25 @@ after_success:
     - docker build -t vdrozdovskyi/multi-nginx ./nginx 
     - docker build -t vdrozdovskyi/multi-server ./server
     - docker build -t vdrozdovskyi/multi-worker ./worker 
+    
+    # Login docker
     - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+    
+    # Push images to docker
     - docker push vdrozdovskyi/multi-client
     - docker push vdrozdovskyi/multi-nginx 
     - docker push vdrozdovskyi/multi-server
     - docker push vdrozdovskyi/multi-worker
 
-
-    # Login docker
-
-
-
-# deploy:
-#     provider: elasticbeanstalk
-#     region: "us-east-2"
-#     app: "docker"
-#     env: "Docker-env"
-#     bucket_name: "elasticbeanstalk-us-east-2-926417195330"
-#     bucket_path: "docker"
-#     on:
-#         branch: master
-#     access_key_id: $AWS_ACCESS_KEY
-#     secret_acces_key: $AWS_SECRET_KEY
+deploy:
+    edge: true
+    provider: elasticbeanstalk
+    region: "us-east-2"
+    app: "multi-docker"
+    env: "multidocker-env"
+    bucket_name: "elasticbeanstalk-us-east-2-926417195330"
+    bucket_path: "docker-multi"
+    on:
+        branch: master
+    access_key_id: $AWS_ACCESS_KEY
+    secret_acces_key: $AWS_SECRET_KEY
